@@ -8,7 +8,7 @@ import ErrorMessage from '../Error/ErrorMessage';
 import MovieModal from '../Modal/Modal';
 
 import { fetchMovies } from '../../services/movieService';
-import { Movie } from '../../types/movie';
+import type { Movie } from '../../types/movie';
 
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);

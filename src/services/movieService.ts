@@ -1,22 +1,28 @@
-import axios, { AxiosResponse } from 'axios';
-import { Movie } from '../types/movie';
+import axios from 'axios';
+import type { Movie } from '../types/movie';
 
-const API_URL = 'https://api.themoviedb.org/3/search/movie';
+const BASE_URL = 'https://api.themoviedb.org/3/search/movie';
+
+const config = {
+  headers: {
+    Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+  },
+};
+
+interface MovieApiResponse {
+  results: Movie[];
+}
 
 export const fetchMovies = async (query: string): Promise<Movie[]> => {
-  if (!query.trim()) return [];
+  const response = await axios.get<MovieApiResponse>(BASE_URL, {
+    ...config,
+    params: {
+      query,
+      language: 'en-US',
+      include_adult: false,
+    },
+  });
 
-  try {
-    const response: AxiosResponse<{ results: Movie[] }> = await axios.get(API_URL, {
-      params: { query },
-      headers: {
-        Authorization: import.meta.env.VITE_TMDB_TOKEN,
-      },
-    });
-
-    return response.data.results;
-  } catch (error) {
-    console.error('Помилка при запиті фільмів:', error);
-    return [];
-  }
+  return response.data.results;
 };
+
