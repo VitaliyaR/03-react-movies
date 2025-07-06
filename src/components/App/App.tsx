@@ -42,11 +42,11 @@ function App() {
 
   const handleSelectMovie = (movie: Movie) => {
     console.log('🎬 Обрано фільм:', movie);
-    setSelectedMovie(movie); // ✅ Тепер відкриваємо модалку
+    setSelectedMovie(movie); // 
   };
 
   const handleCloseModal = () => {
-    setSelectedMovie(null); // ✅ Закриваємо модалку
+    setSelectedMovie(null); // 
   };
 
   return (
