@@ -15,7 +15,7 @@ function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); // ✅ Стейт для модалки
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); 
 
   const handleSearch = async (query: string) => {
     setMovies([]);
