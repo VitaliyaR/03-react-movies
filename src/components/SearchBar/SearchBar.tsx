@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import styles from './SearchBar.module.css';
 import toast from 'react-hot-toast';
+import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
   onSubmit: (query: string) => void;
@@ -9,11 +9,12 @@ interface SearchBarProps {
 const SearchBar = ({ onSubmit }: SearchBarProps) => {
   const [query, setQuery] = useState('');
 
-  console.log('SearchBar props:', { onSubmit });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const trimmedQuery = query.trim();
 
     if (!trimmedQuery) {
@@ -22,7 +23,6 @@ const SearchBar = ({ onSubmit }: SearchBarProps) => {
     }
 
     onSubmit(trimmedQuery);
-    setQuery('');
   };
 
   return (
@@ -45,7 +45,7 @@ const SearchBar = ({ onSubmit }: SearchBarProps) => {
             placeholder="Search movies..."
             autoFocus
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleChange}
           />
           <button className={styles.button} type="submit">
             Search
@@ -57,3 +57,5 @@ const SearchBar = ({ onSubmit }: SearchBarProps) => {
 };
 
 export default SearchBar;
+
+
