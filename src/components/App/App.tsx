@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 import SearchBar from '../SearchBar/SearchBar';
 import MovieGrid from '../MovieGrid/MovieGrid';
 import Loader from '../Loader/Loader';
-
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import MovieModal from '../MovieModal/MovieModal';
 
@@ -15,9 +14,17 @@ function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null); 
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  const handleSearch = async (query: string) => {
+  // ✅ НОВА функція для Form Actions
+  const handleSearch = async (formData: FormData) => {
+    const query = formData.get('query')?.toString().trim() || '';
+
+    if (!query) {
+      toast.error('Please enter your search query.');
+      return;
+    }
+
     setMovies([]);
     setError(false);
     setLoading(true);
@@ -32,26 +39,25 @@ function App() {
 
       setMovies(results);
     } catch (err) {
-      setError(true);
-      toast.error('Oops! Something went wrong.');
       console.error('Помилка при запиті фільмів:', err);
+      toast.error('Oops! Something went wrong.');
+      setError(true);
     } finally {
       setLoading(false);
     }
   };
 
   const handleSelectMovie = (movie: Movie) => {
-    console.log('🎬 Обрано фільм:', movie);
-    setSelectedMovie(movie); // 
+    setSelectedMovie(movie);
   };
 
   const handleCloseModal = () => {
-    setSelectedMovie(null); // 
+    setSelectedMovie(null);
   };
 
   return (
     <>
-      <SearchBar onSubmit={handleSearch} />
+      <SearchBar action={handleSearch} />
 
       {loading ? (
         <Loader />
