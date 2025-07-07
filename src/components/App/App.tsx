@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 import SearchBar from '../SearchBar/SearchBar';
 import MovieGrid from '../MovieGrid/MovieGrid';
@@ -16,15 +16,7 @@ function App() {
   const [error, setError] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
-  // ✅ НОВА функція для Form Actions
-  const handleSearch = async (formData: FormData) => {
-    const query = formData.get('query')?.toString().trim() || '';
-
-    if (!query) {
-      toast.error('Please enter your search query.');
-      return;
-    }
-
+  const handleSearch = async (query: string) => {
     setMovies([]);
     setError(false);
     setLoading(true);
@@ -39,9 +31,9 @@ function App() {
 
       setMovies(results);
     } catch (err) {
-      console.error('Помилка при запиті фільмів:', err);
-      toast.error('Oops! Something went wrong.');
       setError(true);
+      toast.error('Oops! Something went wrong.');
+      console.error('❌ Error while fetching movies:', err);
     } finally {
       setLoading(false);
     }
@@ -57,7 +49,8 @@ function App() {
 
   return (
     <>
-      <SearchBar action={handleSearch} />
+      <Toaster position="top-right" reverseOrder={false} /> {/* ✅ Обов'язковий тостер */}
+      <SearchBar onSubmit={handleSearch} /> {/* ✅ Не action, а onSubmit */}
 
       {loading ? (
         <Loader />
@@ -75,4 +68,6 @@ function App() {
 }
 
 export default App;
+
+
 
